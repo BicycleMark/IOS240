@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouchEvents", "TouchEvents.csproj", "{AD45C64F-F123-40ED-A327-581EA0E30AF6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|iPhone = Release|iPhone
+		Release|iPhoneSimulator = Release|iPhoneSimulator
+		Debug|iPhone = Debug|iPhone
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Debug|iPhone.Build.0 = Debug|iPhone
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Release|Any CPU.ActiveCfg = Release|iPhone
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Release|Any CPU.Build.0 = Release|iPhone
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Release|iPhone.ActiveCfg = Release|iPhone
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Release|iPhone.Build.0 = Release|iPhone
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{AD45C64F-F123-40ED-A327-581EA0E30AF6}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+	EndGlobalSection
+EndGlobal
