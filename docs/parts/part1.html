@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 1: Drag and snap</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>Touch and Gestures</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+
+        <h2>Duration</h2>
+        <p>20 minutes</p>
+
+        <div class="hintblock">
+            <b>Tip:</b> This is an individual exercise, make sure to take advantage of the live instructor when you review the exercise together.
+        </div>
+
+        <h2>Goals</h2>
+
+        <p>
+            The primary goal of this lab is to introduce you to touch events on the iOS platform.
+        </p>
+        <img src="res/images/ex1_complete.png" alt="" width="240" style="border:1px solid grey;"/></p>
+
+        <h2>Required assets</h2>
+        <p>
+            There is a start solution in in the <b>Exercise 1</b> folder.
+            Additionally, there is a completed solution which you can use to compare your work.</p>
+
+        <h2>Challenge</h2>
+        <p>
+            This is an individual exercise, intended for you to complete on it on your own during class; take advantage of the live instructor and ask questions.
+            Here are the high-level steps we will be working through:
+         <ol>
+           <li>Open the Start Solution in the Exercise 1 folder</li>
+           <li>Name the 3 Views in the storyboard; name the <code>UImageView</code> <b>imgLogo</b> and name the two simple <code>UIVIew</code>s <b>boxOne</b> and <b>boxTwo</b>.</li>
+           <li>Setup the View Controller
+             <ul>
+               <li>Open DragAndSnapViewController.cs.</li>
+               <li>Add a class level <code>boolean</code> named <b>imageIsMoving</b>.</li>
+               <li>In <code>ViewDidLoad</code>, use <code>this.View.BringSubviewToFront</code> to ensure <b>imgLogo</b> is shown above the other views.</li>
+             </ul>
+           </li>
+           <li>Respond to Touches Began events; check if the touch occurred within imgLogo and set <b>imageIsMoving</b> to <code>true</code>.</li>
+           <li>Respond to Move events; move <b>imgLogo</b> to current position</li>
+           <li>Respond to Touches Evented events; if the touch ends within the bounds of either box, center <b>imgLogo</b> within the box, otherwise center within the view controller.</li>
+           <li>Respond to Touches Cancelled events; center <b>imgLogo</b> within the view controller</b>.</li>
+        </ol>
+        </p>
+
+        <!-- Steps -->
+      <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to complete the exercise.
+        </p>
+
+        <div class="hintblock">
+          <b>Tip: </b>Review Apple's Human Interface Guidelines for more information on creating touchable user-interface components:
+          <a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/LayoutandAppearance.html">Adaptivity and Layout</a><br>
+      </div>
+
+        <h2>Open the Start Solution</h2>
+        <ol>
+            <li>Open the start solution in the <b>Exercise 1</b> folder.</li>
+            <li>Run the application, you should see two boxes and a Xamarin logo.</li>
+        </ol>
+
+        <h2>Name the Views</h2>
+        <ol>
+          <li>Open MainStoryboard.storyboard.</li>
+          <li>Select the Xamarin logo <code>UIImageView</code>.  In the properties pane, under identity, set its name to <b>imgLogo</b>.</li>
+          <li>Repeat the above steps for the 2 purple boxes and name them <b>boxOne</b> and <b>boxTwo</b> respectively.</li>
+        </ol>
+
+        <h2>Setup the View Controller</h2>
+        <ol>
+          <li>Open DragAndSnapViewController.cs.</li>
+          <li>We're going use a <code>boolean</code> to track when the image is being moved.
+            Add a class level <code>bool</code> named <b>imageIsMoving</b>.</li>
+          <li>We also want to make sure the Xamarin logo appears above the boxes.
+            In the <code>ViewDidLoad</code> method, call <code>BringSubviewToFront</code> on the View Controller's <code>View</code>
+            and pass in <b>imgLogo</b>.</li>
+        </ol>
+  <p><a href="#" onclick="toggleCode(this,'DragAndSnapViewController');return false;" class="uiitem">Show Code</a>
+  <div class="indent-medium" id="DragAndSnapViewController" style="display:none;">
+  <pre class="prettyprint">
+public partial class DragAndSnapViewController : UIViewController
+{
+   bool imageIsMoving = false;
+   ...
+   public override void ViewDidLoad ()
+   {
+      base.ViewDidLoad ();
+      this.View.BringSubviewToFront (imgLogo);
+   }
+   ...
+}</pre></div></p>
+
+        <h2>Respond to Touches Began events </h2>
+        <ol>
+          <li>Override the <code>TouchesBegan</code> method.</li>
+          <li>Get a reference to the <code>UITouch</code> object from the <code>NSSet</code> <b>touches</b> parameter.
+          Cast the <b>touches</b>' AnyObject property to a <code>UITouch</code>.</li>
+          <li>Check to see if the touch occurred within the Xamarin logo <code>UIImageView</code>.
+           Use the <code>Contains</code> method defined on <b>xamLogo's</b> frame.
+           If <code>Contains</code> returns true, set <b>imageIsMoving</b> to <code>true</code>.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'TouchesBegan');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="TouchesBegan" style="display:none;">
+        <pre class="prettyprint">
+public override void TouchesBegan (NSSet touches, UIEvent evt)
+{
+   base.TouchesBegan (touches, evt);
+
+   var touch = touches.AnyObject as UITouch;
+
+   if (touch == null)
+      return;
+
+   if (imgLogo.Frame.Contains (touch.LocationInView (View)))
+      imageIsMoving = true;
+}</pre></div></p>
+
+        <h2>Respond to Moved events</h2>
+        <ol>
+          <li>Override <code>TouchesMoved</code>.</li>
+          <li>Like you did in the previous step, get a reference to the <code>UITouch</code> (see above for instructions).</li>
+          <li>Return from the method if you don't have a valid touch object or <b>imageIsMoving</b> is <code>false</code>.</li>
+          <li>Get the change in position from the last update.
+          Use <b>touches</b>' <code>PreviousLocationInView</code> and <code>LocationInView</code> methods.
+          <li>Use the <i>delta</i> values to update the position of <b>imgLogo</b>.
+          One technique is shown in the code block below.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'TouchesMoved');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="TouchesMoved" style="display:none;">
+        <pre class="prettyprint">
+public override void TouchesMoved (NSSet touches, UIEvent evt)
+{
+   base.TouchesMoved (touches, evt);
+
+   var touch = touches.AnyObject as UITouch;
+
+   if (touch == null || imageIsMoving == false)
+	    return;
+
+   nfloat deltaX = touch.PreviousLocationInView(View).X - touch.LocationInView(View).X;
+   nfloat deltaY = touch.PreviousLocationInView(View).Y - touch.LocationInView(View).Y;
+
+   var newPoint = new CGPoint (imgLogo.Frame.X - deltaX, imgLogo.Frame.Y - deltaY);
+
+   imgLogo.Frame = new CGRect(newPoint, imgLogo.Frame.Size);
+}</pre></div></p>
+
+        <h2>Respond to Touches Ended events</h2>
+        <ol>
+          <li>Override <code>TouchesEnded</code>.</li>
+          <li>And again, get a reference to the <code>UITouch</code>.</li>
+          <li>Use the <code>CGRect</code> <code>Contains</code> method to determine if the touch ended within either box.
+          If it is within a box, use the <code>Center</code> property to align <b>imgLogo</b> to its center.
+          If the touch ended outside of either box, center <b>imgLogo</b>, within the view controller.</li>
+          <li>Regardless of the location, set <b>imageIsMoving</b> to <code>false</code>.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'TouchesEnded');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="TouchesEnded" style="display:none;">
+        <pre class="prettyprint">
+public override void TouchesEnded (NSSet touches, UIEvent evt)
+{
+   base.TouchesEnded (touches, evt);
+
+   var touch = touches.AnyObject as UITouch;
+
+   if (touch == null || imageIsMoving == false)
+      return;
+
+   if (boxOne.Frame.Contains (imgLogo.Center) == true)
+   {
+      imgLogo.Center = boxOne.Center;
+   }
+   else if (boxTwo.Frame.Contains (imgLogo.Center) == true)
+   {
+      imgLogo.Center = boxTwo.Center;
+   }
+   else
+   {
+      imgLogo.Center = this.View.Center;
+   }
+   imageIsMoving = false;
+}</pre></div></p>
+
+        <h2>Respond to Touches Cancelled events</h2>
+        <ol>
+          <li>Override <code>OnTouchesCancelled</code>.</li>
+          <li>Center <b>imgLogo</b> within the view controller.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'TouchesCancelled');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="TouchesCancelled" style="display:none;">
+        <pre class="prettyprint">
+public override void TouchesCancelled (NSSet touches, UIEvent evt)
+{
+   base.TouchesCancelled (touches, evt);
+
+   imageIsMoving = false;
+}</pre></div></p>
+
+        <h2>Bonus - add animations</h2>
+        <ol>
+          <li>Use the static <code>UIView.Animate</code> method in <code>OnTouchesEnded</code> to animate <b>imgLogo</b> when it's positioned.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'TouchesEnded2');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="TouchesEnded2" style="display:none;">
+        <pre class="prettyprint">
+public override void TouchesEnded (NSSet touches, UIEvent evt)
+{
+   base.TouchesEnded (touches, evt);
+
+   var touch = touches.AnyObject as UITouch;
+
+   if (touch == null || imageIsMoving == false)
+	    return;
+
+   if (boxOne.Frame.Contains (imgLogo.Center) == true)
+   {
+      UIView.Animate (0.5, () => {
+		     imgLogo.Center = boxOne.Center;
+		     imgLogo.Transform = CGAffineTransform.MakeScale(0.5f, 0.5f);
+	    });
+   }
+   else if (boxTwo.Frame.Contains (imgLogo.Center) == true)
+   {
+      UIView.Animate (0.5, () => {
+         imgLogo.Center = boxTwo.Center;
+         imgLogo.Transform = CGAffineTransform.MakeScale(0.5f, 0.5f);
+      });
+   }
+   else
+   {
+      UIView.Animate (0.25, () => {
+		     imgLogo.Center = this.View.Center;
+		      imgLogo.Transform = CGAffineTransform.MakeScale (1, 1);
+	    });
+   }
+   imageIsMoving = false;
+}</pre></div></p>
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise, you used a Xamarin.iOS application and added images to the screen and added touch events that enabled the user to drag and snap the Xamarin logo in two boxes using both code-behind and in the Storyboard designer with a <code>ViewController</code>.
+        </p>
+
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>
