@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 4: Create a multi-gesture application</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>Touch and Gestures</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+
+        <h2>Duration</h2>
+        <p>15 minutes</p>
+
+        <h2>Goals</h2>
+
+        <p>
+          The primary goal of this lab is to use multiple gestures simultaneously.
+        </p>
+        <img src="res/images/ex4_complete.png" alt="" width="240" style="border:1px solid grey;"/></p>
+
+        <h2>Required assets</h2>
+        <p>
+          The lab is a continuation of the previous exercise.  You can use your existing project or open the completed solution in in the <b>Exercise 3</b> folder.
+           Additionally, there is a completed solution in the <b>Exercise 4</b> folder which you can use to compare your work.
+        </p>
+
+        <h2>Challenge</h2>
+        <p>This is an individual exercise, intended for you to complete on it on your own during class; take advantage of the live instructor and ask questions.
+          Here are the high-level steps we will be working through:</p>
+        <ol>
+            <li>Add class level variables of type <code>nfloat</code>to track rotation and scale.</li>
+            <li>Update the <code>UpdateTransform</code> method using the new variables.</li>
+            <li>Add gesture recognizers for pinch and rotation to the view controller.</li>
+            <li>Add handler methods for both gesture recognizers.</li>
+            <li>Update the class level variable for float and scale in the handler methods.</li>
+            <li>Set all three gesture recognizers <code>ShouldRecgonzierSimultaneously</code> delegates to allow simultaneous gestures.</li>
+        </ol>
+
+        <!-- Steps -->
+      <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to complete the exercise.
+        </p>
+
+        <h2>Add class level variables</h2>
+        <p>In this lab we'll be adding gesture recognizers to rotate and scale the logo.
+        <ol>
+          <li>Open <b>GesturesViewControllers.cs</b>.
+          <li>Add a class level <code>nfloat</code> variable named <b>rotation</b> and initialize it to 0.</li>
+          <li>Add a class level <code>nfloat</code> variable named <b>scale</b> and initialize it to 1.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'Member');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="Member" style="display:none;">
+        <pre class="prettyprint">
+partial class GesturesViewController : UIViewController
+{
+   private nfloat rotation = 0;
+   private nfloat scale = 1;
+   ...
+</pre></div></p>
+
+        <h2>Update the <code>UpdateTransform</code> method</h2>
+        <p>We'll continue to use the <code>UpdateTransform</code> method to set the visual state of our Xamarin logo.</p>
+        <ol>
+          <li>Call <b>transform</b>'s <code>Rotate</code> method, passing in the class level variable <b>rotation</b> we just created.</li>
+          <li>Call <b>transform</b>'s <code>Scale</code> method, passing the the class level variable <b>scale</b> for both parameters.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'UpdateTransform');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="UpdateTransform" style="display:none;">
+        <pre class="prettyprint">
+void UpdateTransform ()
+{
+   var transform = CGAffineTransform.MakeIdentity ();
+
+   transform.Rotate (rotation);
+
+   transform.Scale (scale, scale);
+
+   transform.Translate (translate.X, translate.Y);
+
+   imgLogo.Transform = transform;
+}</pre></div></p>
+
+        <h2>Add gesture recognizers</h2>
+        <ol>
+          <li>In the <code>ViewDidLoad</code> method, create a <code>UIRotationGestureRecognizer</code> named <b>rotationGesture</b>.</li>
+          <li>We'll create a method named <b>HandleRotation</b> to respond to the recognizer; set the <code>Action</code> constructor parameter to "HandleRotation".</li>
+          <li>Create a <code>UIPinchGestureRecognizer</code> named <b>pinchGesture</b>.</li>
+          <li>We'll create a method named <b>HandlePinch</b> to respond to the recognizer, set the <code>Action</code> constructor parameter to "HandlePinch".</li>
+          <li>Add both gesture recognizers to the view controller.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'ViewDidLoad2');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="ViewDidLoad2" style="display:none;">
+        <pre class="prettyprint">
+public override void ViewDidLoad ()
+{
+   ...
+
+   var rotationGesture = new UIRotationGestureRecognizer (HandleRotation);
+   this.View.AddGestureRecognizer (rotationGesture);
+
+   var pinchGesture = new UIPinchGestureRecognizer (HandlePinch);
+   this.View.AddGestureRecognizer (pinchGesture);
+}</pre></div></p>
+
+        <h2>Create the HandlePinch method</h2>
+        <ol>
+          <li>Create a <code>void</code> method named <b>HandlePinch</b> that accepts a <code>UIPinchGestureRecognizer</code>.</li>
+          <li>Use the <code>UIPinchGestureRecognizer</code>'s <code>Scale</code> property to update the class level <code>nfloat</code> <b>scale</b>.
+          We're interested in the change in scale; multiply the class level <b>scale</b> by the updated value.</li>
+          <li>You'll likely want to add some bounds checking on the <b>scale</b>, limit the value to go no higher than 2.5, and no smaller than 0.1.</li>
+          <li>Now set the passed in <b>gesture</b>'s <b>Scale</b> property back to 1.  This way every update will be relative to 1 (or 100%).</li>
+          <li>And then call the <b>UpdateTransform</b> method to update the scale of the Xamarin logo.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'HandlePinch');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="HandlePinch" style="display:none;">
+        <pre class="prettyprint">
+void HandlePinch (UIPinchGestureRecognizer gesture)
+{
+   this.scale *= gesture.Scale;
+
+   if (scale > 2.5f)
+      scale = 2.5f;
+   else if (scale < 0.01)
+      scale = 0.1f;
+
+   gesture.Scale = 1;
+
+   UpdateTransform ();
+}</pre></div></p>
+
+        <h2>Create the HandleRotation method</h2>
+        <ol>
+          <li>Create a <code>void</code> method named <b>HandleRotation</b> that accepts a <code>UIRotationGestureRecognizer</code>.</li>
+          <li>Use the <code>UIPinchGestureRecognizer</code>'s <b>Rotation</b> to update the class level <b>rotation</b> variable.</li>
+          <li>Call the <b>UpdateTransform</b> method to update the rotation of the Xamarin logo.</li>
+          <li>Run the application.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'HandleRotation');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="HandleRotation" style="display:none;">
+        <pre class="prettyprint">
+void HandleRotation (UIRotationGestureRecognizer gesture)
+{
+   this.rotation = gesture.Rotation;
+   UpdateTransform ();
+}</pre></div></p>
+
+        <h2>Enable simultaneous gestures</h2>
+        <p>Notice that all three gestures work individually, but not at the same time.
+           This is by design, by default, if a gesture has been recognized, a view won't recognize other gestures for given interaction.</p>
+        <ol>
+          <li>Create a <code>bool</code> method names <b>ShouldRecognizeSimultaneously</b> that accepts two <code>UIGestureRecognizer</code>s - <b>gestureRecognizer</b> <b>otherGestureRecognizer</b>.</li>
+          <li>In this case we'll return true, but remember you can do comparisons on the passed in values to decide if a gesture is allowed once another has started.</li>
+          <li>In the <code>ViewDidLoad</code> method, set all three gesture recognizer's <code>ShouldRecognizeSimultaneously</code> delegates to our new <b>ShouldRecognizeSimultaneously</b> method.</li>
+          <li>Run the app again.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'ShouldRecognizeSimultaneously');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="ShouldRecognizeSimultaneously" style="display:none;">
+        <pre class="prettyprint">
+public override void ViewDidLoad ()
+{
+   ...
+   rotationGesture.ShouldRecognizeSimultaneously = ShouldRecognizeSimultaneously;
+   pinchGesture.ShouldRecognizeSimultaneously = ShouldRecognizeSimultaneously;
+   panGesture.ShouldRecognizeSimultaneously = ShouldRecognizeSimultaneously;
+}
+
+public bool ShouldRecognizeSimultaneously (UIGestureRecognizer gestureRecognizer, UIGestureRecognizer otherGestureRecognizer)
+{
+   return true;
+}</pre></div></p>
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise you added both a pinch and a rotation gesture detector and enabled the gestures to work simultaneously.
+        </p>
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>
